@@ -11,14 +11,14 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Service
 @Slf4j
-public record KafkaSender(KafkaTemplate<String, User> kafkaTemplate) {
+public record KafkaSender(KafkaTemplate<Integer, User> kafkaTemplate) {
 
     public void send(User user) {
-        ListenableFuture<SendResult<String, User>> future = kafkaTemplate.send(Constants.KAFKA_TOPIC,user.getId(), user);
+        ListenableFuture<SendResult<Integer, User>> future = kafkaTemplate.send(Constants.KAFKA_TOPIC, user.getId(), user);
 
-        future.addCallback(new ListenableFutureCallback<SendResult<String, User>>() {
+        future.addCallback(new ListenableFutureCallback<SendResult<Integer, User>>() {
             @Override
-            public void onSuccess(SendResult<String, User> result) {
+            public void onSuccess(SendResult<Integer, User> result) {
                 log.info("Message [{}] delivered with offset {}", user, result.getRecordMetadata().offset());
             }
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class KafkaListenersExample {
 
     @KafkaListener(topics = Constants.KAFKA_TOPIC)
-    private void readMessages(ConsumerRecord<String, User> consumerRecord) {
+    private void readMessages(ConsumerRecord<Integer, User> consumerRecord) {
         log.info("Received user={} with key={}", consumerRecord.value(), consumerRecord.key());
     }
 }

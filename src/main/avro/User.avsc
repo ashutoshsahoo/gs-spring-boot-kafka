@@ -5,10 +5,18 @@
   "fields": [
     {
       "name": "id",
-      "type": "string"
-    },{
+      "type": "int"
+    },
+    {
       "name": "name",
       "type": "string"
+    },
+    {
+      "name": "age",
+      "type": [
+        "int",
+        "null"
+      ]
     }
   ]
 }
