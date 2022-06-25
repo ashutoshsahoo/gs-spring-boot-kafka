@@ -1,0 +1,11 @@
+{
+  "namespace": "com.ashu.practice.kafka.domain",
+  "type": "record",
+  "name": "UserKey",
+  "fields": [
+    {
+      "name": "userId",
+      "type": "int"
+    }
+  ]
+}

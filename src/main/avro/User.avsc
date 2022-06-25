@@ -17,6 +17,11 @@
         "int",
         "null"
       ]
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "default": ""
     }
   ]
 }

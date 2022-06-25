@@ -14,7 +14,7 @@ public class MessageProducerController {
     @Autowired
     private KafkaSender kafkaSender;
 
-    @GetMapping
+    @PostMapping
     public String publishMessage(@RequestBody User user) {
         log.info("user={}",user);
         kafkaSender.send(user);

@@ -2,23 +2,30 @@ package com.ashu.practice.kafka.service;
 
 import com.ashu.practice.kafka.common.Constants;
 import com.ashu.practice.kafka.domain.User;
+import com.ashu.practice.kafka.domain.UserKey;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.nio.charset.StandardCharsets;
+
 @Service
 @Slf4j
-public record KafkaSender(KafkaTemplate<Integer, User> kafkaTemplate) {
+public record KafkaSender(KafkaTemplate<UserKey, User> kafkaTemplate) {
 
     public void send(User user) {
-        ListenableFuture<SendResult<Integer, User>> future = kafkaTemplate.send(Constants.KAFKA_TOPIC, user.getId(), user);
+        UserKey key= new UserKey(user.getId());
+        var  producerRecord= new ProducerRecord<>(Constants.KAFKA_TOPIC, key, user);
+        producerRecord.headers().add("CITY",user.getCity() != null ? user.getCity().getBytes(StandardCharsets.UTF_8): "NA".getBytes(StandardCharsets.UTF_8));
+        ListenableFuture<SendResult<UserKey, User>> future = kafkaTemplate.send(producerRecord);
 
-        future.addCallback(new ListenableFutureCallback<SendResult<Integer, User>>() {
+        future.addCallback(new ListenableFutureCallback<SendResult<UserKey, User>>() {
             @Override
-            public void onSuccess(SendResult<Integer, User> result) {
+            public void onSuccess(SendResult<UserKey, User> result) {
                 log.info("Message [{}] delivered with offset {}", user, result.getRecordMetadata().offset());
             }
 
