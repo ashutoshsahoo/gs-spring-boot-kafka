@@ -13,10 +13,8 @@
     },
     {
       "name": "age",
-      "type": [
-        "int",
-        "null"
-      ]
+      "type": "int",
+      "default": 20
     }
   ]
 }
