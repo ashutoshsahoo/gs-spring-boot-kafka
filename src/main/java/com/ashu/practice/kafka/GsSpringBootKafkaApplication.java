@@ -16,6 +16,6 @@ public class GsSpringBootKafkaApplication {
 
     @Bean
     public NewTopic topicUsers() {
-        return TopicBuilder.name(Constants.KAFKA_TOPIC).build();
+        return TopicBuilder.name(Constants.TOPIC_USERS).build();
     }
 }

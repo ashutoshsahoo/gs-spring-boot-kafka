@@ -13,15 +13,11 @@
     },
     {
       "name": "age",
-      "type": [
-        "int",
-        "null"
-      ]
+      "type": "int"
     },
     {
       "name": "city",
-      "type": "string",
-      "default": ""
+      "type": "string"
     }
   ]
 }

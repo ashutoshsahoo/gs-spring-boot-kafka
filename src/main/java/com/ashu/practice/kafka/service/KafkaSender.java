@@ -19,7 +19,7 @@ public record KafkaSender(KafkaTemplate<UserKey, User> kafkaTemplate) {
 
     public void send(User user) {
         UserKey key= new UserKey(user.getId());
-        var  producerRecord= new ProducerRecord<>(Constants.KAFKA_TOPIC, key, user);
+        var  producerRecord= new ProducerRecord<>(Constants.TOPIC_USERS, key, user);
         producerRecord.headers().add("CITY",user.getCity() != null ? user.getCity().getBytes(StandardCharsets.UTF_8): "NA".getBytes(StandardCharsets.UTF_8));
         ListenableFuture<SendResult<UserKey, User>> future = kafkaTemplate.send(producerRecord);
 

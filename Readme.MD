@@ -9,12 +9,13 @@
 
 ```shell
 
-curl --location --request GET 'http://127.0.0.1:8080/api/v1/users' \
---header 'Accept: application/json' \
+curl --location --request POST 'localhost:8080/api/v1/users' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "id": "1001",
-    "name": "Ashutosh"
+    "name": "Ashutosh",
+    "id": 1001,
+    "age":32,
+    "city":"London"
 }'
 
 ```
