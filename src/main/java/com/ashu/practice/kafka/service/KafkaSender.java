@@ -14,17 +14,17 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 public record KafkaSender(KafkaTemplate<Integer, User> kafkaTemplate) {
 
     public void send(User user) {
-        ListenableFuture<SendResult<Integer, User>> future = kafkaTemplate.send(Constants.KAFKA_TOPIC, user.getId(), user);
+        ListenableFuture<SendResult<Integer, User>> future = kafkaTemplate.send(Constants.TOPIC_USERS, user.getId(), user);
 
         future.addCallback(new ListenableFutureCallback<SendResult<Integer, User>>() {
             @Override
             public void onSuccess(SendResult<Integer, User> result) {
-                log.info("Message [{}] delivered with offset {}", user, result.getRecordMetadata().offset());
+                log.info("Message {} delivered with offset {}", user, result.getRecordMetadata().offset());
             }
 
             @Override
             public void onFailure(Throwable ex) {
-                log.warn("Unable to deliver message [{}]. {}", user, ex.getMessage());
+                log.warn("Unable to deliver message {}. Reason: {}", user, ex.getMessage());
             }
         });
 
