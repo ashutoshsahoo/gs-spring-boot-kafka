@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: http://localhost:9092
     streams:
       replication-factor: 3
       application-id: user-app-streams

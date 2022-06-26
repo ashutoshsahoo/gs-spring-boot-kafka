@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.config.StreamsBuilderFactoryBean;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -24,18 +26,18 @@ public class UserController {
     private final KafkaSender kafkaSender;
 
     @PostMapping
-    public String publishMessage(@RequestBody User user) {
-        log.info("user={}",user);
+    public void publishMessage(@RequestBody User user) {
+        log.info("user={}", user);
         kafkaSender.send(user);
-        return "Message sent to the Kafka Topic Successfully";
+        log.info("Message sent to the Kafka Topic Successfully");
     }
 
     @GetMapping("/count/{userName}")
-    public Long countUserNames(@PathVariable String userName) {
+    public Map<String, Long> countUserNames(@PathVariable String userName) {
         KafkaStreams kafkaStreams = factoryBean.getKafkaStreams();
         ReadOnlyKeyValueStore<String, Long> counts = kafkaStreams.store(
                 StoreQueryParameters.fromNameAndType(Constants.STATE_STORE_USER_NAME_COUNTS, QueryableStoreTypes.keyValueStore()));
-        return counts.get(userName);
+        return Map.of(userName, counts.get(userName));
     }
 
 
