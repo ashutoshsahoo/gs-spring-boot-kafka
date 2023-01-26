@@ -6,28 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
 public record KafkaSender(KafkaTemplate<Integer, User> kafkaTemplate) {
 
     public void send(User user) {
-        ListenableFuture<SendResult<Integer, User>> future = kafkaTemplate.send(Constants.TOPIC_USERS, user.getId(), user);
-
-        future.addCallback(new ListenableFutureCallback<SendResult<Integer, User>>() {
-            @Override
-            public void onSuccess(SendResult<Integer, User> result) {
-                log.info("Message {} delivered with offset {}", user, result.getRecordMetadata().offset());
+        CompletableFuture<SendResult<Integer, User>> future = kafkaTemplate.send(Constants.TOPIC_USERS, user.getId(), user);
+        future.whenCompleteAsync((value, ex) -> {
+            if (value != null) {
+                log.info("Message {} delivered with offset {}", user, value.getRecordMetadata().offset());
             }
-
-            @Override
-            public void onFailure(Throwable ex) {
+            if (ex != null) {
                 log.warn("Unable to deliver message {}. Reason: {}", user, ex.getMessage());
             }
         });
-
     }
-
 }
