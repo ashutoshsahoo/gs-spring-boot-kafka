@@ -18,8 +18,8 @@ public class GsSpringBootKafkaApplication {
     public NewTopic topicUsers() {
         return TopicBuilder
                 .name(Constants.TOPIC_USERS)
-                .partitions(3)
-                .replicas(3)
+//                .partitions(3)
+//                .replicas(3)
                 .build();
     }
 }
