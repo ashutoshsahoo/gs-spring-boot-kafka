@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class KafkaListenersExample {
+public class UserKafkaListener {
 
     @KafkaListener(topics = Constants.TOPIC_USERS)
     private void readMessages(ConsumerRecord<Integer, User> consumerRecord) {
-        log.info("Received user={} with key={}", consumerRecord.value(), consumerRecord.key());
+        User user = consumerRecord.value();
+        Integer key = consumerRecord.key();
+        log.info("Received user={} with key={}", user, key);
     }
 }
